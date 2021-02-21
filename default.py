@@ -1,6 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import urllib
+import urllib.parse
 import sys
 import re
 import os
@@ -224,30 +224,32 @@ def parameters_string_to_dict(parameters):
 
 
 def addDir(name, url, mode, iconimage, stopPlayback="", kiosk=""):
-    u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+urllib.quote_plus(mode)+"&stopPlayback="+urllib.quote_plus(stopPlayback)+"&kiosk="+urllib.quote_plus(kiosk)
+    u = sys.argv[0]+"?url="+urllib.parse.quote_plus(url)+"&mode="+urllib.parse.quote_plus(mode)+"&stopPlayback="+urllib.parse.quote_plus(stopPlayback)+"&kiosk="+urllib.parse.quote_plus(kiosk)
     ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({'icon': "DefaultFolder.png", 'thumb': iconimage})
     liz.setInfo(type="Video", infoLabels={"Title": name})
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
 
 
 def addSiteDir(name, url, mode, iconimage, stopPlayback, kiosk):
-    u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+urllib.quote_plus(mode)+"&stopPlayback="+urllib.quote_plus(stopPlayback)+"&kiosk="+urllib.quote_plus(kiosk)
+    u = sys.argv[0]+"?url="+urllib.parse.quote_plus(url)+"&mode="+urllib.parse.quote_plus(mode)+"&stopPlayback="+urllib.parse.quote_plus(stopPlayback)+"&kiosk="+urllib.parse.quote_plus(kiosk)
     ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({'icon': "DefaultFolder.png", 'thumb': iconimage})
     liz.setInfo(type="Video", infoLabels={"Title": name})
-    liz.addContextMenuItems([(translation(30006), 'RunPlugin(plugin://'+addonID+'/?mode=editSite&url='+urllib.quote_plus(name)+')',), (translation(30002), 'RunPlugin(plugin://'+addonID+'/?mode=removeSite&url='+urllib.quote_plus(name)+')',)])
+    liz.addContextMenuItems([(translation(30006), 'RunPlugin(plugin://'+addonID+'/?mode=editSite&url='+urllib.parse.quote_plus(name)+')',), (translation(30002), 'RunPlugin(plugin://'+addonID+'/?mode=removeSite&url='+urllib.parse.quote_plus(name)+')',)])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
 
 params = parameters_string_to_dict(sys.argv[2])
-mode = urllib.unquote_plus(params.get('mode', ''))
-name = urllib.unquote_plus(params.get('name', ''))
-url = urllib.unquote_plus(params.get('url', ''))
-stopPlayback = urllib.unquote_plus(params.get('stopPlayback', 'no'))
-kiosk = urllib.unquote_plus(params.get('kiosk', 'yes'))
-userAgent = urllib.unquote_plus(params.get('userAgent', ''))
+mode = urllib.parse.unquote_plus(params.get('mode', ''))
+name = urllib.parse.unquote_plus(params.get('name', ''))
+url = urllib.parse.unquote_plus(params.get('url', ''))
+stopPlayback = urllib.parse.unquote_plus(params.get('stopPlayback', 'no'))
+kiosk = urllib.parse.unquote_plus(params.get('kiosk', 'yes'))
+userAgent = urllib.parse.unquote_plus(params.get('userAgent', ''))
 
 
 if mode == 'addSite':
